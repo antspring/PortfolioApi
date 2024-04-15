@@ -7,7 +7,7 @@ using Portfolio.Models.User;
 
 namespace Portfolio.Services;
 
-public class AuthenticationService(PortfolioDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+public class AuthenticationService(PortfolioDbContext dbContext, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
 {
     public string Registration(User user)
     {
@@ -33,13 +33,13 @@ public class AuthenticationService(PortfolioDbContext dbContext, IHttpContextAcc
     private JwtSecurityToken CreateJwtToken(IEnumerable<Claim> claims)
     {
         return new JwtSecurityToken(
-            issuer: Environment.GetEnvironmentVariable("ISSUER"),
-            audience: Environment.GetEnvironmentVariable("AUDIENCE"),
+            issuer: configuration["ISSUER"],
+            audience: configuration["AUDIENCE"],
             claims: claims,
             expires: DateTime.Now.AddMinutes(30),
             signingCredentials: new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                    Environment.GetEnvironmentVariable("SECURITY_KEY") ?? string.Empty)),
+                    configuration["SECURITY_KEY"] ?? string.Empty)),
                 SecurityAlgorithms.HmacSha256));
     }
 }
