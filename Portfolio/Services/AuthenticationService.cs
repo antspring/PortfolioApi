@@ -1,13 +1,13 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.IdentityModel.Tokens;
 using Portfolio.Models.User;
 
 namespace Portfolio.Services;
 
-public class AuthenticationService(PortfolioDbContext dbContext, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+public class AuthenticationService(
+    PortfolioDbContext dbContext,
+    IHttpContextAccessor httpContextAccessor,
+    TokenService tokenService)
 {
     public string Registration(User user)
     {
@@ -15,8 +15,7 @@ public class AuthenticationService(PortfolioDbContext dbContext, IHttpContextAcc
         dbContext.SaveChanges();
         var claims = new List<Claim> { new(ClaimTypes.Name, user.Username) };
         httpContextAccessor.HttpContext?.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims)));
-        var jwt = CreateJwtToken(claims);
-        return new JwtSecurityTokenHandler().WriteToken(jwt);
+        return tokenService.GenerateAccessToken(claims);
     }
 
     public string Login(UserLogin user)
@@ -26,20 +25,6 @@ public class AuthenticationService(PortfolioDbContext dbContext, IHttpContextAcc
         if (userFromDb == null) throw new UnauthorizedAccessException();
         var claims = new List<Claim> { new(ClaimTypes.Name, userFromDb.Username) };
         httpContextAccessor.HttpContext?.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims)));
-        var jwt = CreateJwtToken(claims);
-        return new JwtSecurityTokenHandler().WriteToken(jwt);
-    }
-
-    private JwtSecurityToken CreateJwtToken(IEnumerable<Claim> claims)
-    {
-        return new JwtSecurityToken(
-            issuer: configuration["ISSUER"],
-            audience: configuration["AUDIENCE"],
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
-            signingCredentials: new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                    configuration["SECURITY_KEY"] ?? string.Empty)),
-                SecurityAlgorithms.HmacSha256));
+        return tokenService.GenerateAccessToken(claims);
     }
 }

@@ -33,5 +33,6 @@ public static class ServiceCollectionExtension
     {
         services.AddHttpContextAccessor();
         services.AddScoped<AuthenticationService>();
+        services.AddSingleton<TokenService>();
     }
 }
