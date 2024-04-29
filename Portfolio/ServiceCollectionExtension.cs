@@ -22,6 +22,7 @@ public static class ServiceCollectionExtension
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero,
                 ValidIssuer = configuration["ISSUER"],
                 ValidAudience = configuration["AUDIENCE"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SECURITY_KEY"] ?? string.Empty))
