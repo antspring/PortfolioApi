@@ -29,6 +29,11 @@ namespace Portfolio.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasAnnotation("Relational:JsonPropertyName", "description");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text")
@@ -39,10 +44,20 @@ namespace Portfolio.Migrations
                         .HasColumnType("text")
                         .HasAnnotation("Relational:JsonPropertyName", "imageUrl");
 
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasAnnotation("Relational:JsonPropertyName", "location");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasAnnotation("Relational:JsonPropertyName", "password");
+
+                    b.Property<string>("Profession")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasAnnotation("Relational:JsonPropertyName", "profession");
 
                     b.Property<string>("Username")
                         .IsRequired()

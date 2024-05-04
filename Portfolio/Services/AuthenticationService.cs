@@ -1,45 +1,30 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.IdentityModel.Tokens;
 using Portfolio.Models.User;
 
 namespace Portfolio.Services;
 
-public class AuthenticationService(PortfolioDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+public class AuthenticationService(
+    PortfolioDbContext dbContext,
+    IHttpContextAccessor httpContextAccessor,
+    TokenService tokenService)
 {
-    public string Registration(User user)
+    public (string, string) Registration(User user)
     {
         dbContext.Users.Add(user);
         dbContext.SaveChanges();
         var claims = new List<Claim> { new(ClaimTypes.Name, user.Username) };
         httpContextAccessor.HttpContext?.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims)));
-        var jwt = CreateJwtToken(claims);
-        return new JwtSecurityTokenHandler().WriteToken(jwt);
+        return (tokenService.GenerateAccessToken(claims), tokenService.GenerateRefreshToken());
     }
 
-    public string Login(UserLogin user)
+    public (string, string) Login(UserLogin user)
     {
         var userFromDb =
             dbContext.Users.FirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
         if (userFromDb == null) throw new UnauthorizedAccessException();
         var claims = new List<Claim> { new(ClaimTypes.Name, userFromDb.Username) };
         httpContextAccessor.HttpContext?.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims)));
-        var jwt = CreateJwtToken(claims);
-        return new JwtSecurityTokenHandler().WriteToken(jwt);
-    }
-
-    private JwtSecurityToken CreateJwtToken(IEnumerable<Claim> claims)
-    {
-        return new JwtSecurityToken(
-            issuer: Environment.GetEnvironmentVariable("ISSUER"),
-            audience: Environment.GetEnvironmentVariable("AUDIENCE"),
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
-            signingCredentials: new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                    Environment.GetEnvironmentVariable("SECURITY_KEY") ?? string.Empty)),
-                SecurityAlgorithms.HmacSha256));
+        return (tokenService.GenerateAccessToken(claims), tokenService.GenerateRefreshToken());
     }
 }
