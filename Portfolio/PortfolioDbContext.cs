@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Portfolio.Models.Tokens;
 using Portfolio.Models.User;
 
 namespace Portfolio;
@@ -10,4 +11,5 @@ public class PortfolioDbContext : DbContext
     }
     
     public DbSet<User> Users { get; set; }
+    public DbSet<RefreshSession> RefreshSessions { get; set; }
 }

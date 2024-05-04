@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Portfolio.Models.Tokens;
 using Portfolio.Models.User;
 using Portfolio.Services;
 
@@ -11,7 +12,14 @@ public class AuthenticationController(AuthenticationService authService) : Contr
     [HttpPost("registration")]
     public IActionResult Registration(User user)
     {
-        return Ok(authService.Registration(user));
+        var (accessToken, refreshToken) = authService.Registration(user);
+        Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            SameSite = SameSiteMode.None,
+            Secure = true
+        });
+        return Ok(new AccessToken(accessToken));
     }
 
     [HttpPost("login")]
@@ -19,7 +27,41 @@ public class AuthenticationController(AuthenticationService authService) : Contr
     {
         try
         {
-            return Ok(authService.Login(user));
+            var (accessToken, refreshToken) = authService.Login(user);
+            Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.None,
+                Secure = true
+            });
+            return Ok(new AccessToken(accessToken));
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+    }
+
+    [HttpGet("refresh-tokens")]
+    public IActionResult UpdateTokens()
+    {
+        if (!Request.Cookies.Keys.Contains("refreshToken"))
+        {
+            return Unauthorized();
+        }
+
+        try
+        {
+            var (accessToken, refreshToken) = authService.UpdateTokens(Request.Cookies["refreshToken"]);
+            Response.Cookies.Delete("refreshToken");
+            Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.None,
+                Secure = true
+            });
+
+            return Ok(new AccessToken(accessToken));
         }
         catch (UnauthorizedAccessException)
         {

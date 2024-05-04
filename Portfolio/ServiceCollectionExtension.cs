@@ -8,10 +8,10 @@ namespace Portfolio;
 
 public static class ServiceCollectionExtension
 {
-    public static void AddPortfolioServices(this IServiceCollection services)
+    public static void AddPortfolioServices(this IServiceCollection services, ConfigurationManager configuration)
     {
         services.AddDbContext<PortfolioDbContext>(options =>
-            options.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING")));
+            options.UseNpgsql(configuration["DATABASE_CONNECTION_STRING"]));
         services.AddControllers();
         services.AddAuthorization();
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -22,9 +22,10 @@ public static class ServiceCollectionExtension
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = Environment.GetEnvironmentVariable("ISSUER"),
-                ValidAudience = Environment.GetEnvironmentVariable("AUDIENCE"),
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECURITY_KEY") ?? string.Empty))
+                ClockSkew = TimeSpan.Zero,
+                ValidIssuer = configuration["ISSUER"],
+                ValidAudience = configuration["AUDIENCE"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SECURITY_KEY"] ?? string.Empty))
             };
         });
     }
@@ -33,5 +34,6 @@ public static class ServiceCollectionExtension
     {
         services.AddHttpContextAccessor();
         services.AddScoped<AuthenticationService>();
+        services.AddSingleton<TokenService>();
     }
 }
