@@ -7,7 +7,7 @@ namespace Portfolio.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthenticationController(AuthenticationService authService, IConfiguration configuration) : ControllerBase
+public class AuthenticationController(AuthenticationService authService) : ControllerBase
 {
     [HttpPost("registration")]
     public IActionResult Registration(User user)
@@ -17,8 +17,7 @@ public class AuthenticationController(AuthenticationService authService, IConfig
         {
             HttpOnly = true,
             SameSite = SameSiteMode.None,
-            Secure = true,
-            Expires = DateTimeOffset.Now.AddDays(Convert.ToDouble(configuration["EXPIRES_REFRESH_TOKEN"]))
+            Secure = true
         });
         return Ok(new AccessToken(accessToken));
     }
@@ -33,9 +32,35 @@ public class AuthenticationController(AuthenticationService authService, IConfig
             {
                 HttpOnly = true,
                 SameSite = SameSiteMode.None,
-                Secure = true,
-                Expires = DateTimeOffset.Now.AddDays(Convert.ToDouble(configuration["EXPIRES_REFRESH_TOKEN"]))
+                Secure = true
             });
+            return Ok(new AccessToken(accessToken));
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+    }
+
+    [HttpGet("refresh-tokens")]
+    public IActionResult UpdateTokens()
+    {
+        if (!Request.Cookies.Keys.Contains("refreshToken"))
+        {
+            return Unauthorized();
+        }
+
+        try
+        {
+            var (accessToken, refreshToken) = authService.UpdateTokens(Request.Cookies["refreshToken"]);
+            Response.Cookies.Delete("refreshToken");
+            Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.None,
+                Secure = true
+            });
+
             return Ok(new AccessToken(accessToken));
         }
         catch (UnauthorizedAccessException)
