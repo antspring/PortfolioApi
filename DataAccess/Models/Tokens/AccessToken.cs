@@ -1,3 +1,3 @@
-namespace Portfolio.Models.Tokens;
+namespace DataAccess.Models.Tokens;
 
 public record AccessToken(string Token);
