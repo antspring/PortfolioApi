@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
-namespace Portfolio.Models.User;
+namespace DataAccess.Models.User;
 
 [Index(nameof(Email), IsUnique=true)]
 public class User

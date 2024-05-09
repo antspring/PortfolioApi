@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Portfolio.Models.Tokens;
-using Portfolio.Models.User;
-using Portfolio.Services;
+﻿using DataAccess.Models.Tokens;
+using DataAccess.Models.User;
+using Microsoft.AspNetCore.Mvc;
+using Services.Services;
 
 namespace Portfolio.Controllers;
 

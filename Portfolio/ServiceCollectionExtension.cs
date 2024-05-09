@@ -1,5 +1,6 @@
 ﻿using System.Text;
-using Portfolio.Services;
+using DataAccess;
+using Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

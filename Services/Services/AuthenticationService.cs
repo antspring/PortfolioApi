@@ -1,10 +1,13 @@
 ﻿using System.Security.Claims;
+using DataAccess;
+using DataAccess.Models.Tokens;
+using DataAccess.Models.User;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Portfolio.Models.Tokens;
-using Portfolio.Models.User;
+using Microsoft.Extensions.Configuration;
 
-namespace Portfolio.Services;
+namespace Services.Services;
 
 public class AuthenticationService(
     PortfolioDbContext dbContext,

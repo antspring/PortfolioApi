@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Portfolio.Models.Tokens;
+namespace DataAccess.Models.Tokens;
 
 public record RefreshSession
 {
@@ -13,7 +13,7 @@ public record RefreshSession
 
     [Key] public int Id { get; set; }
     public int UserId { get; init; }
-    public User.User User { get; init; }
+    public Models.User.User User { get; init; }
     public string RefreshToken { get; init; }
     public DateTime ExpirationDate { get; init; }
 };
