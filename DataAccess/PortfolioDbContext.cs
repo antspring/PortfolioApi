@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Portfolio.Models.Tokens;
-using Portfolio.Models.User;
+﻿using DataAccess.Models.Tokens;
+using Microsoft.EntityFrameworkCore;
 
-namespace Portfolio;
+namespace DataAccess;
 
 public class PortfolioDbContext : DbContext
 {
@@ -10,6 +9,6 @@ public class PortfolioDbContext : DbContext
     {
     }
     
-    public DbSet<User> Users { get; set; }
+    public DbSet<Models.User.User> Users { get; set; }
     public DbSet<RefreshSession> RefreshSessions { get; set; }
 }
