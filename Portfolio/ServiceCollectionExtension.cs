@@ -1,9 +1,11 @@
 ﻿using System.Text;
 using DataAccess;
+using DataAccess.Repositories.Implementations;
 using Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Services.Services.Tokens;
 
 namespace Portfolio;
 
@@ -35,6 +37,9 @@ public static class ServiceCollectionExtension
     {
         services.AddHttpContextAccessor();
         services.AddScoped<AuthenticationService>();
-        services.AddSingleton<TokenService>();
+        services.AddScoped<TokenService>();
+        services.AddSingleton<TokenGenerator>();
+        services.AddScoped<UserRepository>();
+        services.AddScoped<RefreshSessionRepository>();
     }
 }
