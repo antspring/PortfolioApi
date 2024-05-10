@@ -2,12 +2,13 @@
 using DataAccess.Models.User;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
+using Services.Services.Tokens;
 
 namespace Portfolio.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthenticationController(AuthenticationService authService) : ControllerBase
+public class AuthenticationController(AuthenticationService authService, TokenService tokenService) : ControllerBase
 {
     [HttpPost("registration")]
     public IActionResult Registration(User user)
@@ -52,7 +53,7 @@ public class AuthenticationController(AuthenticationService authService) : Contr
 
         try
         {
-            var (accessToken, refreshToken) = authService.UpdateTokens(Request.Cookies["refreshToken"]);
+            var (accessToken, refreshToken) = tokenService.UpdateTokens(Request.Cookies["refreshToken"]);
             Response.Cookies.Delete("refreshToken");
             Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
             {

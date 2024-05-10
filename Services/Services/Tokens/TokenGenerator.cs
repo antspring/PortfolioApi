@@ -5,9 +5,9 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Services.Services;
+namespace Services.Services.Tokens;
 
-public class TokenService(IConfiguration configuration)
+public class TokenGenerator(IConfiguration configuration)
 {
     public string GenerateAccessToken(IEnumerable<Claim> claims)
     {
