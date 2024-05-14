@@ -1,71 +1,40 @@
 ﻿using System.Security.Claims;
-using DataAccess;
-using DataAccess.Models.Tokens;
 using DataAccess.Models.User;
+using DataAccess.Repositories.Implementations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Services.Providers;
+using Services.Services.Tokens;
 
 namespace Services.Services;
 
 public class AuthenticationService(
-    PortfolioDbContext dbContext,
+    UserRepository userRepository,
     IHttpContextAccessor httpContextAccessor,
-    IConfiguration configuration,
-    TokenService tokenService)
+    TokenService tokenService,
+    TokenGenerator tokenGenerator)
 {
+    private readonly ClaimsProvider _claimsProvider = new();
+
     public (string, string) Registration(User user)
     {
-        dbContext.Users.Add(user);
-        dbContext.SaveChanges();
-        var claims = new List<Claim> { new(ClaimTypes.Name, user.Username) };
+        userRepository.Add(user);
+        var claims = _claimsProvider.GetClaims(user);
         httpContextAccessor.HttpContext?.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims)));
-        var refreshToken = tokenService.GenerateRefreshToken();
-        SaveRefreshToken(refreshToken, user.Id);
-        return (tokenService.GenerateAccessToken(claims), refreshToken);
+        var refreshToken = tokenGenerator.GenerateRefreshToken();
+        tokenService.SaveRefreshToken(refreshToken, user.Id);
+        return (tokenGenerator.GenerateAccessToken(claims), refreshToken);
     }
 
     public (string, string) Login(UserLogin user)
     {
         var userFromDb =
-            dbContext.Users.FirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
+            userRepository.GetFirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
         if (userFromDb == default) throw new UnauthorizedAccessException();
-        var claims = new List<Claim> { new(ClaimTypes.Name, userFromDb.Username) };
+        var claims = _claimsProvider.GetClaims(userFromDb);
         httpContextAccessor.HttpContext?.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims)));
-        var refreshToken = tokenService.GenerateRefreshToken();
-        SaveRefreshToken(refreshToken, userFromDb.Id);
-        return (tokenService.GenerateAccessToken(claims), refreshToken);
-    }
-
-    public (string, string) UpdateTokens(string refreshToken)
-    {
-        var refreshSession = dbContext.RefreshSessions
-            .Include(refreshSession => refreshSession.User)
-            .FirstOrDefault(session => session.RefreshToken == refreshToken);
-        if (refreshSession == default)
-        {
-            throw new UnauthorizedAccessException();
-        }
-
-        if (refreshSession.ExpirationDate < DateTime.Now)
-        {
-            dbContext.RefreshSessions.Remove(refreshSession);
-            dbContext.SaveChanges();
-            throw new UnauthorizedAccessException();
-        }
-
-        dbContext.RefreshSessions.Remove(refreshSession);
-        var newRefreshToken = tokenService.GenerateRefreshToken();
-        SaveRefreshToken(newRefreshToken, refreshSession.UserId);
-        var claims = new List<Claim> { new(ClaimTypes.Name, refreshSession.User.Username) };
-        return (tokenService.GenerateAccessToken(claims), newRefreshToken);
-    }
-
-    private void SaveRefreshToken(string refreshToken, int userId)
-    {
-        dbContext.RefreshSessions.Add(new RefreshSession(userId, refreshToken,
-            DateTime.Now.AddDays(Convert.ToDouble(configuration["EXPIRES_REFRESH_TOKEN"])).ToUniversalTime()));
-        dbContext.SaveChanges();
+        var refreshToken = tokenGenerator.GenerateRefreshToken();
+        tokenService.SaveRefreshToken(refreshToken, userFromDb.Id);
+        return (tokenGenerator.GenerateAccessToken(claims), refreshToken);
     }
 }
