@@ -7,9 +7,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddPortfolioServices(builder.Configuration);
 builder.Services.AddDependencies();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
+app.UseCors(policyBuilder => policyBuilder.AllowAnyOrigin());
 app.MapControllers();
 
 // Configure the HTTP request pipeline.
