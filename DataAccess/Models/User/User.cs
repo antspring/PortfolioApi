@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models.User;
 
-[Index(nameof(Email), IsUnique=true)]
-public class User
+[Index(nameof(Email), IsUnique = true)]
+public class User : IValidatableObject
 {
     [Key] public int Id { get; set; }
 
@@ -36,5 +36,14 @@ public class User
         Location = userDTO.Location;
         Description = userDTO.Description;
         return this;
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        var dbContext = (PortfolioDbContext)validationContext.GetService(typeof(PortfolioDbContext));
+        if (dbContext.Users.Any(user => user.Email == Email))
+        {
+            yield return new ValidationResult("Email already exists", new[] { nameof(Email) });
+        }
     }
 }
