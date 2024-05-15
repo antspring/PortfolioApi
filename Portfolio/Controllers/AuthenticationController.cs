@@ -40,7 +40,7 @@ public class AuthenticationController(AuthenticationService authService, TokenSe
         }
         catch (UnauthorizedAccessException)
         {
-            return Unauthorized();
+            return StatusCode(422);
         }
     }
 
