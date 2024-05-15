@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace DataAccess.Models.User;
+namespace DataAccess.DTO.User;
 
 public class UserLogin
 {

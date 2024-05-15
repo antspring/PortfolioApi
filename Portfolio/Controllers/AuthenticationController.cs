@@ -1,4 +1,5 @@
-﻿using DataAccess.Models.Tokens;
+﻿using DataAccess.DTO.User;
+using DataAccess.Models.Tokens;
 using DataAccess.Models.User;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
@@ -39,7 +40,7 @@ public class AuthenticationController(AuthenticationService authService, TokenSe
         }
         catch (UnauthorizedAccessException)
         {
-            return Unauthorized();
+            return StatusCode(422);
         }
     }
 

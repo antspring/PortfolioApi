@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using DataAccess.DTO.User;
 using DataAccess.Models.User;
 using DataAccess.Repositories.Implementations;
 using Microsoft.AspNetCore.Authentication;

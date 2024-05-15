@@ -8,8 +8,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddPortfolioServices(builder.Configuration);
 builder.Services.AddDependencies();
 
-var app = builder.Build();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
+
+var app = builder.Build();
+app.UseCors();
 app.MapControllers();
 
 // Configure the HTTP request pipeline.
