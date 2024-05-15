@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using DataAccess.DTO.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models.User;
@@ -26,4 +27,14 @@ public class User
     [JsonPropertyName("profession")] public string? Profession { get; set; }
     [JsonPropertyName("location")] public string? Location { get; set; }
     [JsonPropertyName("description")] public string? Description { get; set; }
+
+    public User Update(UserUpdateDto userDTO)
+    {
+        Username = userDTO.Username;
+        ImageUrl = userDTO.ImageUrl;
+        Profession = userDTO.Profession;
+        Location = userDTO.Location;
+        Description = userDTO.Description;
+        return this;
+    }
 }
