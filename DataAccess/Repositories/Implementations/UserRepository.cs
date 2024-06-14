@@ -1,5 +1,6 @@
 using DataAccess.Models.User;
 using DataAccess.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories.Implementations;
 
