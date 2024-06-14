@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 		.env = .env
 		Portfolio\Portfolio.csproj = Portfolio\Portfolio.csproj
+		.gitignore = .gitignore
+		.env.example = .env.example
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{7C7F65DC-31AE-456F-B911-E802F7297A6D}"

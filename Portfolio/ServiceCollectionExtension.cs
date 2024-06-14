@@ -28,11 +28,12 @@ public static class ServiceCollectionExtension
                 ClockSkew = TimeSpan.Zero,
                 ValidIssuer = configuration["ISSUER"],
                 ValidAudience = configuration["AUDIENCE"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SECURITY_KEY"] ?? string.Empty))
+                IssuerSigningKey =
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SECURITY_KEY"] ?? string.Empty))
             };
         });
     }
-    
+
     public static void AddDependencies(this IServiceCollection services)
     {
         services.AddHttpContextAccessor();
@@ -41,5 +42,6 @@ public static class ServiceCollectionExtension
         services.AddSingleton<TokenGenerator>();
         services.AddScoped<UserRepository>();
         services.AddScoped<RefreshSessionRepository>();
+        services.AddTransient<ImagesService>();
     }
 }
