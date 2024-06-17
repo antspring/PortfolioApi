@@ -33,6 +33,9 @@ public class UserRepository(PortfolioDbContext dbContext) : IRepository<User>
         dbContext.Users.Remove(entity);
         dbContext.SaveChanges();
     }
-    
-    
+
+    public User GetUserWithSocialNetworks(Func<User, bool> query)
+    {
+        return dbContext.Users.Include(user => user.SocialNetworks).FirstOrDefault(query);
+    }
 }

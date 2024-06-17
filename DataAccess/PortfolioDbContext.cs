@@ -9,7 +9,8 @@ public class PortfolioDbContext : DbContext
     public PortfolioDbContext(DbContextOptions<PortfolioDbContext> options) : base(options)
     {
     }
-    
+
     public DbSet<User> Users { get; set; }
     public DbSet<RefreshSession> RefreshSessions { get; set; }
+    public DbSet<SocialNetwork> SocialNetworks { get; set; }
 }
