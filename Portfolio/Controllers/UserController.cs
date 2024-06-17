@@ -31,5 +31,12 @@ namespace Portfolio.Controllers
             userService.AddSocialNetworks(User.Identity.Name, socialNetwork);
             return Ok();
         }
+        
+        [HttpDelete("remove-social-network")]
+        public IActionResult RemoveSocialNetwork([FromBody] SocialNetworkDTO socialNetwork)
+        {
+            userService.RemoveSocialNetwork(User.Identity.Name, socialNetwork);
+            return Ok();
+        }
     }
 }
