@@ -43,5 +43,6 @@ public static class ServiceCollectionExtension
         services.AddScoped<UserRepository>();
         services.AddScoped<RefreshSessionRepository>();
         services.AddTransient<ImagesService>();
+        services.AddTransient<UserService>();
     }
 }
