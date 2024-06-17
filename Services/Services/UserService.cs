@@ -7,22 +7,21 @@ namespace Services.Services;
 
 public class UserService(UserRepository userRepository, SocialNetworkRepository socialNetworkRepository)
 {
-    public UserProfileDto UpdateUser(string username, UserUpdateDto userDto)
+    public UserProfileDto UpdateUser(int userId, UserUpdateDto userDto)
     {
-        var user = userRepository.GetFirstOrDefault(user => user.Username == username);
+        var user = userRepository.GetFirstOrDefault(user => user.Id == userId);
         userRepository.Update(user.Update(userDto));
         return new UserProfileDto(user);
     }
 
-    public void AddSocialNetworks(string username, SocialNetworkDTO socialNetwork)
+    public void AddSocialNetworks(int userId, SocialNetworkDTO socialNetwork)
     {
-        var user = userRepository.GetFirstOrDefault(user => user.Username == username);
-        socialNetworkRepository.Add(new SocialNetwork(socialNetwork.Link, user.Id));
+        socialNetworkRepository.Add(new SocialNetwork(socialNetwork.Link, userId));
     }
     
-    public void RemoveSocialNetwork(string username, SocialNetworkDTO socialNetwork)
+    public void RemoveSocialNetwork(int userId, SocialNetworkDTO socialNetwork)
     {
-        var user = userRepository.GetUserWithSocialNetworks(user => user.Username == username);
+        var user = userRepository.GetUserWithSocialNetworks(user => user.Id == userId);
         var socialNetworkFromDB = user.SocialNetworks.FirstOrDefault(sn => sn.Link == socialNetwork.Link);
         socialNetworkRepository.Remove(socialNetworkFromDB);
     }

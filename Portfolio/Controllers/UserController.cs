@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using DataAccess.DTO.SocialNetwork;
 using DataAccess.DTO.User;
 using DataAccess.Repositories.Implementations;
@@ -15,27 +16,28 @@ namespace Portfolio.Controllers
         [HttpGet("get")]
         public IActionResult GetUser()
         {
-            var user = userRepository.GetUserWithSocialNetworks(user => User.Identity.Name == user.Username);
+            var user = userRepository.GetUserWithSocialNetworks(user =>
+                int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) == user.Id);
             return Ok(new UserProfileDto(user));
         }
 
         [HttpPut("update")]
         public IActionResult UpdateUser(UserUpdateDto userDto)
         {
-            return Ok(userService.UpdateUser(User.Identity.Name, userDto));
+            return Ok(userService.UpdateUser(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), userDto));
         }
 
         [HttpPost("add-social-network")]
         public IActionResult AddSocialNetworks([FromBody] SocialNetworkDTO socialNetwork)
         {
-            userService.AddSocialNetworks(User.Identity.Name, socialNetwork);
+            userService.AddSocialNetworks(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), socialNetwork);
             return Ok();
         }
-        
+
         [HttpDelete("remove-social-network")]
         public IActionResult RemoveSocialNetwork([FromBody] SocialNetworkDTO socialNetwork)
         {
-            userService.RemoveSocialNetwork(User.Identity.Name, socialNetwork);
+            userService.RemoveSocialNetwork(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), socialNetwork);
             return Ok();
         }
     }
