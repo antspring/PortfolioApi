@@ -1,29 +1,44 @@
-using DataAccess;
+using System.Security.Claims;
+using DataAccess.DTO.SocialNetwork;
 using DataAccess.DTO.User;
 using DataAccess.Repositories.Implementations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.Services;
 
 namespace Portfolio.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(UserRepository userRepository, PortfolioDbContext dbContext) : ControllerBase
+    public class UserController(UserRepository userRepository, UserService userService) : ControllerBase
     {
         [HttpGet("get")]
         public IActionResult GetUser()
         {
-            var user = userRepository.GetFirstOrDefault(user => User.Identity.Name == user.Username);
+            var user = userRepository.GetUserWithSocialNetworks(user =>
+                int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) == user.Id);
             return Ok(new UserProfileDto(user));
         }
 
-        [HttpPatch("update")]
+        [HttpPut("update")]
         public IActionResult UpdateUser(UserUpdateDto userDto)
         {
-            var currentUser = userRepository.GetFirstOrDefault(user => User.Identity.Name == user.Username);
-            userRepository.Update(currentUser.Update(userDto));
-            return Ok(new UserProfileDto(currentUser));
+            return Ok(userService.UpdateUser(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), userDto));
+        }
+
+        [HttpPost("add-social-network")]
+        public IActionResult AddSocialNetworks([FromBody] SocialNetworkDTO socialNetwork)
+        {
+            userService.AddSocialNetworks(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), socialNetwork);
+            return Ok();
+        }
+
+        [HttpDelete("remove-social-network")]
+        public IActionResult RemoveSocialNetwork([FromBody] SocialNetworkDTO socialNetwork)
+        {
+            userService.RemoveSocialNetwork(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), socialNetwork);
+            return Ok();
         }
     }
 }

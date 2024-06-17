@@ -12,6 +12,7 @@ public class UserProfileDto
         Profession = user.Profession;
         Location = user.Location;
         Description = user.Description;
+        SocialNetworks = user.SocialNetworks;
     }
 
     [JsonPropertyName("username")] public string Username { get; set; }
@@ -20,4 +21,5 @@ public class UserProfileDto
     [JsonPropertyName("profession")] public string? Profession { get; set; }
     [JsonPropertyName("location")] public string? Location { get; set; }
     [JsonPropertyName("description")] public string? Description { get; set; }
+    [JsonPropertyName("socialNetworks")] public List<Models.User.SocialNetwork> SocialNetworks { get; set; }
 }
