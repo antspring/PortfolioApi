@@ -28,6 +28,8 @@ public class User : IValidatableObject
     [JsonPropertyName("location")] public string? Location { get; set; }
     [JsonPropertyName("description")] public string? Description { get; set; }
 
+    public List<SocialNetwork>? SocialNetworks { get; set; }
+
     public User Update(UserUpdateDto userDTO)
     {
         Username = userDTO.Username;

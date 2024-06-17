@@ -1,11 +1,18 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace DataAccess.Models.User;
 
 public class SocialNetwork
 {
-    [Key] public int Id { get; set; }
-    public string Link { get; set; }
-    public int UserId { get; set; }
-    public User User { get; set; }
+    public SocialNetwork(string link, int userId)
+    {
+        Link = link;
+        UserId = userId;
+    }
+
+    [JsonIgnore] [Key] public int Id { get; set; }
+    [JsonPropertyName("link")] public string Link { get; set; }
+    [JsonIgnore] public int UserId { get; set; }
+    [JsonIgnore] public User User { get; set; }
 }
