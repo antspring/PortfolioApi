@@ -9,7 +9,8 @@ public class ClaimsProvider
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name, user.Username)
+            new(ClaimTypes.Name, user.Username),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
 
         return claims;
