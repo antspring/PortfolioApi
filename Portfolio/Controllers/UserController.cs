@@ -22,7 +22,7 @@ namespace Portfolio.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult UpdateUser(UserUpdateDto userDto)
+        public IActionResult UpdateUser(UserUpdateDTO userDto)
         {
             return Ok(userService.UpdateUser(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), userDto));
         }

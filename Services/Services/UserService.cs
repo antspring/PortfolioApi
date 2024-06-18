@@ -7,7 +7,7 @@ namespace Services.Services;
 
 public class UserService(UserRepository userRepository, SocialNetworkRepository socialNetworkRepository)
 {
-    public UserProfileDto UpdateUser(int userId, UserUpdateDto userDto)
+    public UserProfileDto UpdateUser(int userId, UserUpdateDTO userDto)
     {
         var user = userRepository.GetFirstOrDefault(user => user.Id == userId);
         userRepository.Update(user.Update(userDto));

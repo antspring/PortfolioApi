@@ -27,7 +27,7 @@ public class AuthenticationService(
         return (tokenGenerator.GenerateAccessToken(claims), refreshToken);
     }
 
-    public (string, string) Login(UserLogin user)
+    public (string, string) Login(UserLoginDTO user)
     {
         var userFromDb =
             userRepository.GetFirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);

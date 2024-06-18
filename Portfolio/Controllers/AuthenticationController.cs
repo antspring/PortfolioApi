@@ -25,7 +25,7 @@ public class AuthenticationController(AuthenticationService authService, TokenSe
     }
 
     [HttpPost("login")]
-    public IActionResult Login(UserLogin user)
+    public IActionResult Login(UserLoginDTO user)
     {
         try
         {

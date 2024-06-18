@@ -30,7 +30,7 @@ public class User : IValidatableObject
 
     public List<SocialNetwork>? SocialNetworks { get; set; }
 
-    public User Update(UserUpdateDto userDTO)
+    public User Update(UserUpdateDTO userDTO)
     {
         Username = userDTO.Username;
         ImageUrl = userDTO.ImageUrl;
