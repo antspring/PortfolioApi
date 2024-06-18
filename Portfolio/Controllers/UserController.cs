@@ -18,6 +18,7 @@ namespace Portfolio.Controllers
         {
             var user = userRepository.WithSocialNetworks().WithEducation().GetFirstOrDefault(user =>
                 int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) == user.Id);
+
             return Ok(new UserProfileDto(user));
         }
 

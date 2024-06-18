@@ -1,13 +1,24 @@
 using DataAccess.DTO.Education;
 using DataAccess.Models.User;
 using DataAccess.Repositories.Implementations;
+using Microsoft.AspNetCore.Http;
 
 namespace Services.Services;
 
-public class EducationService(EducationRepository educationRepository, UserRepository userRepository)
+public class EducationService(EducationRepository educationRepository)
 {
-    public void AddEducation(int userId, EducationDTO education)
+    public async Task AddEducation(int userId, string username, IFormFile file, EducationDTO education)
     {
+        var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "images", username);
+        if (!Directory.Exists(directoryPath))
+        {
+            Directory.CreateDirectory(directoryPath);
+        }
+
+        var filePath = Path.Combine(directoryPath, file.FileName);
+        await using var stream = File.Create(filePath);
+        await file.CopyToAsync(stream);
+        education.FilePath = filePath;
         educationRepository.Add(new Education(education, userId));
     }
 

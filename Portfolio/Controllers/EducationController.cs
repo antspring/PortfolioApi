@@ -12,12 +12,13 @@ namespace Portfolio.Controllers
     public class EducationController(EducationService educationService) : ControllerBase
     {
         [HttpPost("add")]
-        public IActionResult AddEducation(EducationDTO education)
+        public async Task<IActionResult> AddEducation([FromForm] IFormFile file, [FromForm] EducationDTO education)
         {
-            educationService.AddEducation(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), education);
+            await educationService.AddEducation(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value),
+                User.Identity.Name, file, education);
             return Ok();
         }
-        
+
         [HttpPut("update")]
         public IActionResult UpdateEducation(EducationDTO education)
         {
