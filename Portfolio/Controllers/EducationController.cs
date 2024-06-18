@@ -17,5 +17,12 @@ namespace Portfolio.Controllers
             educationService.AddEducation(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), education);
             return Ok();
         }
+        
+        [HttpPut("update")]
+        public IActionResult UpdateEducation(EducationDTO education)
+        {
+            educationService.UpdateEducation(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), education);
+            return Ok();
+        }
     }
 }

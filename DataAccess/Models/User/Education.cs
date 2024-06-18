@@ -18,10 +18,18 @@ public class Education
         UserId = userId;
     }
 
-    [JsonIgnore] [Key] public int Id { get; set; }
+    [Key] public int Id { get; set; }
     public string Title { get; set; }
     public string? Description { get; set; }
     public string? FilePath { get; set; }
     [JsonIgnore] public int UserId { get; set; }
     [JsonIgnore] public User User { get; set; }
+    
+    public Education Update(EducationDTO education)
+    {
+        Title = education.Title;
+        Description = education.Description;
+        FilePath = education.FilePath;
+        return this;
+    }
 }
