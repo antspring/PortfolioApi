@@ -18,10 +18,10 @@ public class UserService(UserRepository userRepository, SocialNetworkRepository 
     {
         socialNetworkRepository.Add(new SocialNetwork(socialNetwork.Link, userId));
     }
-    
+
     public void RemoveSocialNetwork(int userId, SocialNetworkDTO socialNetwork)
     {
-        var user = userRepository.GetUserWithSocialNetworks(user => user.Id == userId);
+        var user = userRepository.WithSocialNetworks().GetFirstOrDefault(user => user.Id == userId);
         var socialNetworkFromDB = user.SocialNetworks.FirstOrDefault(sn => sn.Link == socialNetwork.Link);
         socialNetworkRepository.Remove(socialNetworkFromDB);
     }
