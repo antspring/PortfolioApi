@@ -19,7 +19,8 @@ public class PortfolioDbContext : DbContext
     public DbSet<Project> Projects { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<ProjectImage> ProjectImages { get; set; }
-    
+    public DbSet<Favorite> Favorites { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Team>()
