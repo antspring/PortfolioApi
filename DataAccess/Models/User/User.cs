@@ -29,8 +29,8 @@ public class User : IValidatableObject
     [JsonPropertyName("description")] public string? Description { get; set; }
     public List<SocialNetwork>? SocialNetworks { get; set; }
     public List<Education>? Education { get; set; }
-
     public Style? Style { get; set; }
+    public List<Project.Project>? Projects { get; set; }
 
     public User Update(UserUpdateDTO userDTO)
     {
