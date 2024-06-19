@@ -33,4 +33,11 @@
       <ProjectReference Include="..\Services\Services.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Areas\CommentController\Controllers\" />
+      <Folder Include="Areas\CommentController\Data\" />
+      <Folder Include="Areas\CommentController\Models\" />
+      <Folder Include="Areas\CommentController\Views\" />
+    </ItemGroup>
+
 </Project>

@@ -20,6 +20,7 @@ public class PortfolioDbContext : DbContext
     public DbSet<Team> Teams { get; set; }
     public DbSet<ProjectImage> ProjectImages { get; set; }
     public DbSet<Favorite> Favorites { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
