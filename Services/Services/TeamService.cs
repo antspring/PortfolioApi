@@ -10,4 +10,10 @@ public class TeamService(TeamRepository teamRepository)
     {
         teamRepository.Add(new Team() { Name = teamDto.Name });
     }
+
+    public void RemoveTeam(int id)
+    {
+        var team = teamRepository.GetFirstOrDefault(team => team.Id == id);
+        teamRepository.Remove(team);
+    }
 }

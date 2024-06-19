@@ -16,5 +16,12 @@ namespace Portfolio.Controllers
             teamService.AddTeam(teamDto);
             return Ok();
         }
+
+        [HttpDelete("remove/{id:int}")]
+        public IActionResult RemoveTeam(int id)
+        {
+            teamService.RemoveTeam(id);
+            return Ok();
+        }
     }
 }
