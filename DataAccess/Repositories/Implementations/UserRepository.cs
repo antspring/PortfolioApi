@@ -50,4 +50,10 @@ public class UserRepository(PortfolioDbContext dbContext) : IRepository<User>
         _query = _query.Include(user => user.Education);
         return this;
     }
+
+    public UserRepository WithStyles()
+    {
+        _query = _query.Include(user => user.Style);
+        return this;
+    }
 }
