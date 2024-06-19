@@ -50,4 +50,15 @@ public class EducationService(EducationRepository educationRepository)
 
         educationRepository.Update(educationFromDb.Update(education));
     }
+
+    public void RemoveEducation(int userId, int educationId)
+    {
+        var educationFromDb = educationRepository.GetFirstOrDefault(e => e.UserId == userId && e.Id == educationId);
+        if (File.Exists(educationFromDb.FilePath))
+        {
+            File.Delete(educationFromDb.FilePath);
+        }
+
+        educationRepository.Remove(educationFromDb);
+    }
 }

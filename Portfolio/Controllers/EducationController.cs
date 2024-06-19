@@ -26,5 +26,13 @@ namespace Portfolio.Controllers
                 education);
             return Ok();
         }
+
+        [HttpDelete("remove/{educationId:int}")]
+        public IActionResult RemoveEducation(int educationId)
+        {
+            educationService.RemoveEducation(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value),
+                educationId);
+            return Ok(educationId);
+        }
     }
 }
