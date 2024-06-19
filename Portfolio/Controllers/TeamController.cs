@@ -31,6 +31,12 @@ namespace Portfolio.Controllers
             }
         }
 
+        [HttpGet("get-all")]
+        public IActionResult GetAllTeams()
+        {
+            return Ok(teamService.GetAllTeams(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
+        }
+
         [HttpPost("add-user")]
         public IActionResult AddUserToTeam(int teamId, string username)
         {

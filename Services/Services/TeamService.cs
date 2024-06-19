@@ -22,8 +22,14 @@ public class TeamService(TeamRepository teamRepository, UserRepository userRepos
         {
             throw new Exception("Team not found.");
         }
-        
+
         return team;
+    }
+
+    public List<TeamWithUserNamesDTO> GetAllTeams(int userId)
+    {
+        var user = userRepository.WithTeams().GetFirstOrDefault(user => user.Id == userId);
+        return user.Teams.Select(team => new TeamWithUserNamesDTO(team)).ToList();
     }
 
     public void AddUserToTeam(int teamId, string username)
