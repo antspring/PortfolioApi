@@ -24,5 +24,12 @@ namespace Portfolio.Controllers
             commentService.UpdateComment(commentDto, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
             return Ok();
         }
+        
+        [HttpDelete("remove/{commentId:int}")]
+        public IActionResult RemoveComment(int commentId)
+        {
+            commentService.RemoveComment(commentId, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            return Ok();
+        }
     }
 }
