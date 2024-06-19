@@ -15,8 +15,24 @@ namespace Portfolio.Controllers
         public async Task<IActionResult> AddProject([FromForm] List<IFormFile> files,
             [FromForm] ProjectDTO projectDto)
         {
-            await projectService.AddProject(files, projectDto, User.Identity.Name,
-                int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            if (projectDto.IsTeam)
+            {
+                try
+                {
+                    await projectService.AddTeamProject(files, projectDto,
+                        int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+                }
+                catch (Exception e)
+                {
+                    return NotFound(e.Message);
+                }
+            }
+            else
+            {
+                await projectService.AddProject(files, projectDto, User.Identity.Name,
+                    int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            }
+
             return Ok();
         }
 

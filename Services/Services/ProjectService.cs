@@ -5,41 +5,44 @@ using Microsoft.AspNetCore.Http;
 
 namespace Services.Services;
 
-public class ProjectService(ProjectRepository projectRepository, ProjectImageRepository projectImageRepository)
+public class ProjectService(
+    ProjectRepository projectRepository,
+    ProjectImageRepository projectImageRepository,
+    TeamRepository teamRepository)
 {
-    public async Task AddProject(List<IFormFile> files, ProjectDTO projectDto, string username, int userId)
+    public async Task AddProject(List<IFormFile> files, ProjectDTO projectDto, string ownerName, int ownerId)
     {
         projectRepository.Add(new Project().Update(projectDto));
         Project project;
         if (projectDto.IsTeam)
         {
-            project = projectRepository.GetFirstOrDefault(project => project.OwnerTeamId == userId);
+            project = projectRepository.GetFirstOrDefault(project => project.OwnerTeamId == ownerId);
         }
         else
         {
-            project = projectRepository.GetFirstOrDefault(project => project.OwnerId == userId);
+            project = projectRepository.GetFirstOrDefault(project => project.OwnerId == ownerId);
         }
 
         project.CreatedAt = DateTime.Now.ToUniversalTime();
-        await SavingFiles(files, username, project.Id);
+        await SavingFiles(files, ownerName, project.Id);
         projectImageRepository.SaveChanges();
     }
 
-    public async Task UpdateProject(List<IFormFile> files, ProjectDTO projectDto, string username,
-        int userId)
+    public async Task UpdateProject(List<IFormFile> files, ProjectDTO projectDto, string ownerName,
+        int ownerId)
     {
         Project project;
         if (projectDto.IsTeam)
         {
-            project = projectRepository.GetFirstOrDefault(project => project.OwnerTeamId == userId);
+            project = projectRepository.GetFirstOrDefault(project => project.OwnerTeamId == ownerId);
         }
         else
         {
-            project = projectRepository.GetFirstOrDefault(project => project.OwnerId == userId);
+            project = projectRepository.GetFirstOrDefault(project => project.OwnerId == ownerId);
         }
 
         projectRepository.Update(project.Update(projectDto));
-        await SavingFiles(files, username, project.Id);
+        await SavingFiles(files, ownerName, project.Id);
         projectImageRepository.SaveChanges();
     }
 
@@ -71,6 +74,18 @@ public class ProjectService(ProjectRepository projectRepository, ProjectImageRep
 
         projectImageRepository.ExecuteRemove(projectRemoveDto.Id);
         projectRepository.Remove(project);
+    }
+
+    public async Task AddTeamProject(List<IFormFile> files, ProjectDTO projectDto, int userId)
+    {
+        var team = teamRepository.GetFirstOrDefault(team =>
+            team.Id == projectDto.OwnerId && team.Users.Any(user => user.Id == userId));
+        if (team == default)
+        {
+            throw new Exception("Team not found.");
+        }
+
+        await AddProject(files, projectDto, team.Name, team.Id);
     }
 
     private async Task SavingFiles(List<IFormFile> files, string username, int projectId)

@@ -52,5 +52,7 @@ public static class ServiceCollectionExtension
         services.AddTransient<ProjectRepository>();
         services.AddTransient<ProjectImageRepository>();
         services.AddTransient<ProjectService>();
+        services.AddTransient<TeamRepository>();
+        services.AddTransient<TeamService>();
     }
 }
