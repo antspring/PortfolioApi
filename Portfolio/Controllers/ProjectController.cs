@@ -28,5 +28,19 @@ namespace Portfolio.Controllers
                 int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
             return Ok();
         }
+
+        [HttpDelete("remove")]
+        public IActionResult RemoveProject(ProjectRemoveDTO projectRemoveDto)
+        {
+            try
+            {
+                projectService.RemoveProject(projectRemoveDto);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
     }
 }

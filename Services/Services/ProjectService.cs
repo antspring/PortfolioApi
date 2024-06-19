@@ -20,6 +20,7 @@ public class ProjectService(ProjectRepository projectRepository, ProjectImageRep
             project = projectRepository.GetFirstOrDefault(project => project.OwnerId == userId);
         }
 
+        project.CreatedAt = DateTime.Now.ToUniversalTime();
         await SavingFiles(files, username, project.Id);
         projectImageRepository.SaveChanges();
     }
@@ -40,6 +41,36 @@ public class ProjectService(ProjectRepository projectRepository, ProjectImageRep
         projectRepository.Update(project.Update(projectDto));
         await SavingFiles(files, username, project.Id);
         projectImageRepository.SaveChanges();
+    }
+
+    public void RemoveProject(ProjectRemoveDTO projectRemoveDto)
+    {
+        Project project;
+        if (projectRemoveDto.IsTeam)
+        {
+            project = projectRepository.WithImages()
+                .GetFirstOrDefault(project =>
+                    project.Id == projectRemoveDto.Id && project.OwnerTeamId == projectRemoveDto.OwnerId);
+        }
+        else
+        {
+            project = projectRepository.WithImages()
+                .GetFirstOrDefault(project =>
+                    project.Id == projectRemoveDto.Id && project.OwnerId == projectRemoveDto.OwnerId);
+        }
+
+        if (project == default)
+        {
+            throw new Exception("Project not found.");
+        }
+
+        foreach (var file in project.Images)
+        {
+            File.Delete(file.ImagePath);
+        }
+
+        projectImageRepository.ExecuteRemove(projectRemoveDto.Id);
+        projectRepository.Remove(project);
     }
 
     private async Task SavingFiles(List<IFormFile> files, string username, int projectId)
