@@ -17,4 +17,10 @@ public class FavoriteService(FavoriteRepository favoriteRepository, ProjectRepos
         var projects = favorites.Select(f => f.Project).ToList();
         return projects.Select(p => new ProjectViewDTO(p));
     }
+
+    public void RemoveFavorite(int projectId, int userId)
+    {
+        var favorite = favoriteRepository.GetFirstOrDefault(f => f.UserId == userId && projectId == f.ProjectId);
+        favoriteRepository.Remove(favorite);
+    }
 }
