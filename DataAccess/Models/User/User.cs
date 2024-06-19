@@ -36,7 +36,6 @@ public class User : IValidatableObject
     public User Update(UserUpdateDTO userDTO)
     {
         Username = userDTO.Username;
-        ImageUrl = userDTO.ImageUrl;
         Profession = userDTO.Profession;
         Location = userDTO.Location;
         Description = userDTO.Description;
