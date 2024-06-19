@@ -12,14 +12,22 @@ public class Project
     public int? OwnerId { get; set; }
     public Team? OwnerTeam { get; set; }
     public int? OwnerTeamId { get; set; }
-    public List<ProjectImage> Images { get; set; }
+    public List<ProjectImage>? Images { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public Project Update(ProjectCreateDTO project)
+    public Project Update(ProjectDTO project)
     {
         Title = project.Title;
         Description = project.Description;
-        OwnerId = project.OwnerId;
+        if (project.IsTeam)
+        {
+            OwnerTeamId = project.OwnerId;
+        }
+        else
+        {
+            OwnerId = project.OwnerId;
+        }
+
         return this;
     }
 }

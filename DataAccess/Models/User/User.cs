@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using DataAccess.DTO.User;
+using DataAccess.Models.Project;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models.User;
@@ -32,6 +33,8 @@ public class User : IValidatableObject
     public List<Education>? Education { get; set; }
     public Style? Style { get; set; }
     public List<Project.Project>? Projects { get; set; }
+    [JsonIgnore] public List<Team>? Teams { get; set; }
+    [JsonIgnore] public List<Favorite>? Favorites { get; set; }
 
     public User Update(UserUpdateDTO userDTO)
     {

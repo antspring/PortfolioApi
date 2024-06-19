@@ -1,5 +1,6 @@
 using DataAccess.Models.Project;
 using DataAccess.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories.Implementations;
 
@@ -29,7 +30,12 @@ public class ProjectImageRepository(PortfolioDbContext dbContext) : IRepository<
     {
         dbContext.ProjectImages.Remove(entity);
     }
-    
+
+    public void ExecuteRemove(int projectId)
+    {
+        dbContext.ProjectImages.Where(image => image.ProjectId == projectId).ExecuteDelete();
+    }
+
     public void SaveChanges()
     {
         dbContext.SaveChanges();
