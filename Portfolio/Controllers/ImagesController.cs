@@ -16,18 +16,17 @@ namespace Portfolio.Controllers
             return Ok(new { Path = filePath });
         }
 
-        [HttpGet("get-avatar")]
-        public IActionResult GetUserImage()
+        [AllowAnonymous]
+        [HttpGet("/get/file/app/images/{username}/{filename}")]
+        public IActionResult GetUserImage(string username, string filename)
         {
-            try
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "images", username, filename);
+            if (System.IO.File.Exists(filePath))
             {
-                var path = imagesService.GetUserImage(User.Identity.Name);
-                return PhysicalFile(path, "image/png");
+                return PhysicalFile(filePath, "image/png");
             }
-            catch (FileNotFoundException)
-            {
-                return NotFound();
-            }
+
+            return NotFound();
         }
     }
 }

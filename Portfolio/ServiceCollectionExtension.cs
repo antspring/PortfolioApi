@@ -45,5 +45,7 @@ public static class ServiceCollectionExtension
         services.AddTransient<ImagesService>();
         services.AddTransient<UserService>();
         services.AddTransient<SocialNetworkRepository>();
+        services.AddTransient<EducationRepository>();
+        services.AddTransient<EducationService>();
     }
 }

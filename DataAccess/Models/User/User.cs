@@ -27,10 +27,10 @@ public class User : IValidatableObject
     [JsonPropertyName("profession")] public string? Profession { get; set; }
     [JsonPropertyName("location")] public string? Location { get; set; }
     [JsonPropertyName("description")] public string? Description { get; set; }
-
     public List<SocialNetwork>? SocialNetworks { get; set; }
+    public List<Education>? Education { get; set; }
 
-    public User Update(UserUpdateDto userDTO)
+    public User Update(UserUpdateDTO userDTO)
     {
         Username = userDTO.Username;
         ImageUrl = userDTO.ImageUrl;

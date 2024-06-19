@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace DataAccess.DTO.User;
 
-public class UserUpdateDto
+public class UserUpdateDTO
 {
     [JsonPropertyName("username")] public string? Username { get; set; }
     [JsonPropertyName("imageUrl")] public string? ImageUrl { get; set; }

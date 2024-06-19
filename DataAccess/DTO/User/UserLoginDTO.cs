@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace DataAccess.DTO.User;
 
-public class UserLogin
+public class UserLoginDTO
 {
     [Required]
     [EmailAddress]
