@@ -14,4 +14,5 @@ public class PortfolioDbContext : DbContext
     public DbSet<RefreshSession> RefreshSessions { get; set; }
     public DbSet<SocialNetwork> SocialNetworks { get; set; }
     public DbSet<Education> Education { get; set; }
+    public DbSet<Style> Styles { get; set; }
 }
