@@ -34,5 +34,13 @@ namespace Portfolio.Controllers
                 educationId);
             return Ok(educationId);
         }
+
+        [AllowAnonymous]
+        [HttpGet("get/{username}/{educationId:int}")]
+        public IActionResult GetEducation(string username, int educationId)
+        {
+            var education = educationService.GetEducation(username, educationId);
+            return Ok(education);
+        }
     }
 }

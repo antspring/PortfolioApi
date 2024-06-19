@@ -61,4 +61,10 @@ public class EducationService(EducationRepository educationRepository)
 
         educationRepository.Remove(educationFromDb);
     }
+
+    public Education GetEducation(string username, int educationId)
+    {
+        return educationRepository.WithUser()
+            .GetFirstOrDefault(e => e.User.Username == username && e.Id == educationId);
+    }
 }

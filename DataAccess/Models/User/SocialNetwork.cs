@@ -11,7 +11,7 @@ public class SocialNetwork
         UserId = userId;
     }
 
-    [JsonIgnore] [Key] public int Id { get; set; }
+    [Key] public int Id { get; set; }
     [JsonPropertyName("link")] public string Link { get; set; }
     [JsonIgnore] public int UserId { get; set; }
     [JsonIgnore] public User User { get; set; }
