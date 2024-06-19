@@ -12,10 +12,16 @@ namespace Portfolio.Controllers
     public class FavoriteController(FavoriteService favoriteService) : ControllerBase
     {
         [HttpPost("add")]
-        public IActionResult AddFavorite([FromBody] FavoriteCreateDTO favoriteCreateDto)
+        public IActionResult AddFavorite([FromBody] FavoriteDTO favoriteDto)
         {
-            favoriteService.AddFavorite(favoriteCreateDto.ProjectId, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            favoriteService.AddFavorite(favoriteDto.ProjectId, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
             return Ok();
+        }
+        
+        [HttpGet("get")]
+        public IActionResult GetFavorites()
+        {
+            return Ok(favoriteService.GetFavorites(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
         }
     }
 }

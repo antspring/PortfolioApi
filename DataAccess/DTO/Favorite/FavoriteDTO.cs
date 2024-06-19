@@ -1,6 +1,6 @@
 namespace DataAccess.DTO.Favorite;
 
-public class FavoriteCreateDTO
+public class FavoriteDTO
 {
     public int ProjectId { get; set; }
 }

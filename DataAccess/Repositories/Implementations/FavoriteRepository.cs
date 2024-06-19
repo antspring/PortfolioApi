@@ -1,5 +1,6 @@
 using DataAccess.Models.Project;
 using DataAccess.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories.Implementations;
 
@@ -25,6 +26,14 @@ public class FavoriteRepository(PortfolioDbContext dbContext) : IRepository<Favo
     public IEnumerable<Favorite> GetByQuery(Func<Favorite, bool> query)
     {
         return dbContext.Favorites.Where(query);
+    }
+
+    public List<Favorite> GetFavorites(int userId)
+    {
+        return dbContext.Favorites
+            .Include(f => f.Project.Owner)
+            .Include(f => f.Project.OwnerTeam)
+            .ToList();
     }
 
     public void Remove(Favorite entity)
