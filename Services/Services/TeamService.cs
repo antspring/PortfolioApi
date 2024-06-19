@@ -1,10 +1,15 @@
+using DataAccess;
 using DataAccess.DTO.Team;
 using DataAccess.Models.Project;
 using DataAccess.Repositories.Implementations;
 
 namespace Services.Services;
 
-public class TeamService(TeamRepository teamRepository, UserRepository userRepository)
+public class TeamService(
+    TeamRepository teamRepository,
+    UserRepository userRepository,
+    ProjectRepository projectRepository,
+    ProjectImageRepository projectImageRepository)
 {
     public void AddTeam(TeamDTO teamDto, int userId)
     {
@@ -42,6 +47,18 @@ public class TeamService(TeamRepository teamRepository, UserRepository userRepos
     public void RemoveTeam(int id)
     {
         var team = teamRepository.GetFirstOrDefault(team => team.Id == id);
+        var projects = projectRepository.WithImages().GetByQuery(project => project.OwnerTeamId == id);
+        foreach (var project in projects)
+        {
+            if (project.Images.Count != 0)
+            {
+                foreach (var file in project.Images)
+                {
+                    File.Delete(file.ImagePath);
+                }
+            }
+        }
+
         teamRepository.Remove(team);
     }
 }

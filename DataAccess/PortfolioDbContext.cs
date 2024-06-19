@@ -19,4 +19,17 @@ public class PortfolioDbContext : DbContext
     public DbSet<Project> Projects { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<ProjectImage> ProjectImages { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Team>()
+            .HasMany(t => t.Projects)
+            .WithOne(p => p.OwnerTeam)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Project>()
+            .HasMany(p => p.Images)
+            .WithOne(i => i.Project)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
 }

@@ -24,6 +24,7 @@ public class ProjectService(
         }
 
         project.CreatedAt = DateTime.Now.ToUniversalTime();
+        projectRepository.Update(project);
         await SavingFiles(files, ownerName, project.Id);
         projectImageRepository.SaveChanges();
     }
@@ -78,7 +79,7 @@ public class ProjectService(
 
     public async Task AddTeamProject(List<IFormFile> files, ProjectDTO projectDto, int userId)
     {
-        var team = teamRepository.GetFirstOrDefault(team =>
+        var team = teamRepository.WithUsers().GetFirstOrDefault(team =>
             team.Id == projectDto.OwnerId && team.Users.Any(user => user.Id == userId));
         if (team == default)
         {

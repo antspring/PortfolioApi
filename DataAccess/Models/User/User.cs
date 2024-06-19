@@ -33,7 +33,7 @@ public class User : IValidatableObject
     public List<Education>? Education { get; set; }
     public Style? Style { get; set; }
     public List<Project.Project>? Projects { get; set; }
-    [JsonIgnore] public List<Team> Teams { get; set; }
+    [JsonIgnore] public List<Team>? Teams { get; set; }
 
     public User Update(UserUpdateDTO userDTO)
     {

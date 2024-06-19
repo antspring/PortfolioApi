@@ -1,11 +1,13 @@
 using DataAccess.Models.Project;
 using DataAccess.Models.User;
 using DataAccess.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories.Implementations;
 
 public class TeamRepository(PortfolioDbContext dbContext) : IRepository<Team>
 {
+    private IQueryable<Team> _query { get; set; } = dbContext.Teams;
     public void Add(Team entity)
     {
         dbContext.Teams.Add(entity);
@@ -20,12 +22,12 @@ public class TeamRepository(PortfolioDbContext dbContext) : IRepository<Team>
 
     public Team GetFirstOrDefault(Func<Team, bool> query)
     {
-        return dbContext.Teams.FirstOrDefault(query);
+        return _query.FirstOrDefault(query);
     }
 
     public IEnumerable<Team> GetByQuery(Func<Team, bool> query)
     {
-        return dbContext.Teams.Where(query);
+        return _query.Where(query);
     }
 
     public void Remove(Team entity)
@@ -39,5 +41,11 @@ public class TeamRepository(PortfolioDbContext dbContext) : IRepository<Team>
         team.Users.Add(user);
         dbContext.Teams.Update(team);
         dbContext.SaveChanges();
+    }
+
+    public TeamRepository WithUsers()
+    {
+        _query = _query.Include(team => team.Users);
+        return this;
     }
 }
