@@ -13,9 +13,18 @@ namespace Portfolio.Controllers
     {
         [HttpPost("add")]
         public async Task<IActionResult> AddProject([FromForm] List<IFormFile> files,
-            [FromForm] ProjectCreateDTO projectCreateDto)
+            [FromForm] ProjectDTO projectDto)
         {
-            await projectService.AddProject(files, projectCreateDto, User.Identity.Name,
+            await projectService.AddProject(files, projectDto, User.Identity.Name,
+                int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            return Ok();
+        }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateProject([FromForm] List<IFormFile> files,
+            [FromForm] ProjectDTO projectDto)
+        {
+            await projectService.UpdateProject(files, projectDto, User.Identity.Name,
                 int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
             return Ok();
         }

@@ -15,7 +15,7 @@ public class Project
     public List<ProjectImage> Images { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public Project Update(ProjectCreateDTO project)
+    public Project Update(ProjectDTO project)
     {
         Title = project.Title;
         Description = project.Description;
