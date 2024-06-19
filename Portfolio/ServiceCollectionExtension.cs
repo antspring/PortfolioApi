@@ -49,5 +49,8 @@ public static class ServiceCollectionExtension
         services.AddTransient<EducationService>();
         services.AddTransient<StyleRepository>();
         services.AddTransient<StyleService>();
+        services.AddTransient<ProjectRepository>();
+        services.AddTransient<ProjectImageRepository>();
+        services.AddTransient<ProjectService>();
     }
 }

@@ -3,17 +3,20 @@ using System;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Portfolio.Migrations
+namespace DataAccess.Migrations
 {
     [DbContext(typeof(PortfolioDbContext))]
-    partial class PortfolioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240619125216_CreateProjects,Teams,ProjectImagesTables")]
+    partial class CreateProjectsTeamsProjectImagesTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,12 +71,7 @@ namespace Portfolio.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectImages");
                 });
@@ -256,17 +254,6 @@ namespace Portfolio.Migrations
                     b.Navigation("OwnerTeam");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.Project.ProjectImage", b =>
-                {
-                    b.HasOne("DataAccess.Models.Project.Project", "Project")
-                        .WithMany("Images")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-                });
-
             modelBuilder.Entity("DataAccess.Models.Tokens.RefreshSession", b =>
                 {
                     b.HasOne("DataAccess.Models.User.User", "User")
@@ -309,11 +296,6 @@ namespace Portfolio.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DataAccess.Models.Project.Project", b =>
-                {
-                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("DataAccess.Models.User.User", b =>
