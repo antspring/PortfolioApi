@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DataAccess.Models.User;
 
 [Index(nameof(Email), IsUnique = true)]
+[Index(nameof(Username), IsUnique = true)]
 public class User : IValidatableObject
 {
     [Key] public int Id { get; set; }
@@ -48,6 +49,11 @@ public class User : IValidatableObject
         if (dbContext.Users.Any(user => user.Email == Email))
         {
             yield return new ValidationResult("Email already exists", new[] { nameof(Email) });
+        }
+
+        if (dbContext.Users.Any(user => user.Username == Username))
+        {
+            yield return new ValidationResult("Username already exists", new[] { nameof(Username) });
         }
     }
 }

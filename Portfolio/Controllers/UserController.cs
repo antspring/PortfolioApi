@@ -14,10 +14,11 @@ namespace Portfolio.Controllers
     public class UserController(UserRepository userRepository, UserService userService) : ControllerBase
     {
         [AllowAnonymous]
-        [HttpGet("get/{id:int}")]
-        public IActionResult GetUser(int id)
+        [HttpGet("get/{username}")]
+        public IActionResult GetUser(string username)
         {
-            var user = userRepository.WithSocialNetworks().WithEducation().GetFirstOrDefault(user => id == user.Id);
+            var user = userRepository.WithSocialNetworks().WithEducation()
+                .GetFirstOrDefault(user => username == user.Username);
 
             return Ok(new UserProfileDto(user));
         }
