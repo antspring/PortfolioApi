@@ -30,6 +30,8 @@ public class User : IValidatableObject
     public List<SocialNetwork>? SocialNetworks { get; set; }
     public List<Education>? Education { get; set; }
 
+    public Style? Style { get; set; }
+
     public User Update(UserUpdateDTO userDTO)
     {
         Username = userDTO.Username;
