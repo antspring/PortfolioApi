@@ -10,4 +10,12 @@ public class CommentService(CommentRepository commentRepository)
     {
         commentRepository.Add(new Comment(commentDto, userId));
     }
+
+    public void UpdateComment(CommentUpdateDTO commentDto, int userId)
+    {
+        var comment =
+            commentRepository.GetFirstOrDefault(c => c.UserId == userId && c.Id == commentDto.Id);
+        comment.Content = commentDto.Content;
+        commentRepository.Update(comment);
+    }
 }
