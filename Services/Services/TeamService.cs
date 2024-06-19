@@ -16,7 +16,14 @@ public class TeamService(TeamRepository teamRepository, UserRepository userRepos
 
     public Team GetTeam(int teamId, int userId)
     {
-        return teamRepository.GetFirstOrDefault(team => team.Users.All(user => user.Id == userId) && team.Id == teamId);
+        var user = userRepository.WithTeams().GetFirstOrDefault(user => user.Id == userId);
+        var team = user.Teams.FirstOrDefault(team => team.Id == teamId);
+        if (team == default)
+        {
+            throw new Exception("Team not found.");
+        }
+        
+        return team;
     }
 
     public void AddUserToTeam(int teamId, string username)

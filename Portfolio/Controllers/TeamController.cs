@@ -19,9 +19,16 @@ namespace Portfolio.Controllers
         }
 
         [HttpGet("get/{id:int}")]
-        public IActionResult GetTeam(int teamId)
+        public IActionResult GetTeam(int id)
         {
-            return Ok(teamService.GetTeam(teamId, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
+            try
+            {
+                return Ok(teamService.GetTeam(id, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpPost("add-user")]
