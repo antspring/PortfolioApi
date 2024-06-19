@@ -1,10 +1,13 @@
 using DataAccess.Models.User;
 using DataAccess.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories.Implementations;
 
 public class EducationRepository(PortfolioDbContext dbContext) : IRepository<Education>
 {
+    private IQueryable<Education> _query { get; set; } = dbContext.Education;
+
     public void Add(Education entity)
     {
         dbContext.Education.Add(entity);
@@ -19,17 +22,23 @@ public class EducationRepository(PortfolioDbContext dbContext) : IRepository<Edu
 
     public Education GetFirstOrDefault(Func<Education, bool> query)
     {
-        return dbContext.Education.FirstOrDefault(query);
+        return _query.FirstOrDefault(query);
     }
 
     public IEnumerable<Education> GetByQuery(Func<Education, bool> query)
     {
-        return dbContext.Education.Where(query);
+        return _query.Where(query);
     }
 
     public void Remove(Education entity)
     {
         dbContext.Education.Remove(entity);
         dbContext.SaveChanges();
+    }
+
+    public EducationRepository WithUser()
+    {
+        _query = _query.Include(education => education.User);
+        return this;
     }
 }

@@ -12,7 +12,7 @@ namespace Portfolio.Controllers
     public class EducationController(EducationService educationService) : ControllerBase
     {
         [HttpPost("add")]
-        public async Task<IActionResult> AddEducation([FromForm] IFormFile file, [FromForm] EducationDTO education)
+        public async Task<IActionResult> AddEducation([FromForm] IFormFile? file, [FromForm] EducationDTO education)
         {
             await educationService.AddEducation(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value),
                 User.Identity.Name, file, education);
@@ -20,9 +20,10 @@ namespace Portfolio.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult UpdateEducation(EducationDTO education)
+        public async Task<IActionResult> UpdateEducation([FromForm] IFormFile? file, [FromForm] EducationDTO education)
         {
-            educationService.UpdateEducation(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), education);
+            await educationService.UpdateEducation(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), file,
+                education);
             return Ok();
         }
     }
