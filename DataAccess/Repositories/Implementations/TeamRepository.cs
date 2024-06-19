@@ -1,4 +1,5 @@
 using DataAccess.Models.Project;
+using DataAccess.Models.User;
 using DataAccess.Repositories.Interfaces;
 
 namespace DataAccess.Repositories.Implementations;
@@ -30,6 +31,13 @@ public class TeamRepository(PortfolioDbContext dbContext) : IRepository<Team>
     public void Remove(Team entity)
     {
         dbContext.Teams.Remove(entity);
+        dbContext.SaveChanges();
+    }
+
+    public void AddUserToTeam(Team team, User user)
+    {
+        team.Users.Add(user);
+        dbContext.Teams.Update(team);
         dbContext.SaveChanges();
     }
 }
