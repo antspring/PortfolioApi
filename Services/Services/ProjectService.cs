@@ -47,6 +47,23 @@ public class ProjectService(
         projectImageRepository.SaveChanges();
     }
 
+    private async Task SavingFiles(List<IFormFile> files, string username, int projectId)
+    {
+        var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "images", username);
+        if (!Directory.Exists(directoryPath))
+        {
+            Directory.CreateDirectory(directoryPath);
+        }
+
+        foreach (var file in files)
+        {
+            var filePath = Path.Combine(directoryPath, file.FileName);
+            await using var stream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(stream);
+            projectImageRepository.Add(new ProjectImage() { ImagePath = filePath, ProjectId = projectId });
+        }
+    }
+
     public void RemoveProject(ProjectRemoveDTO projectRemoveDto)
     {
         Project project;
@@ -89,20 +106,15 @@ public class ProjectService(
         await AddProject(files, projectDto, team.Name, team.Id);
     }
 
-    private async Task SavingFiles(List<IFormFile> files, string username, int projectId)
+    public List<ProjectViewDTO> GetAllProjects()
     {
-        var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "images", username);
-        if (!Directory.Exists(directoryPath))
-        {
-            Directory.CreateDirectory(directoryPath);
-        }
-
-        foreach (var file in files)
-        {
-            var filePath = Path.Combine(directoryPath, file.FileName);
-            await using var stream = new FileStream(filePath, FileMode.Create);
-            await file.CopyToAsync(stream);
-            projectImageRepository.Add(new ProjectImage() { ImagePath = filePath, ProjectId = projectId });
-        }
+        return projectRepository.WithOwner().WithOwnerTeam().WithImages().GetAll()
+            .Select(project => new ProjectViewDTO(project)).ToList();
+    }
+    
+    public ProjectViewDTO GetProject(int id)
+    {
+        return new ProjectViewDTO(projectRepository.WithOwner().WithOwnerTeam().WithImages()
+            .GetFirstOrDefault(project => project.Id == id));
     }
 }

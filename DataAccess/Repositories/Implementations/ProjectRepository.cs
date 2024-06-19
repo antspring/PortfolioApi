@@ -41,4 +41,21 @@ public class ProjectRepository(PortfolioDbContext dbContext) : IRepository<Proje
         _query = _query.Include(project => project.Images);
         return this;
     }
+    
+    public ProjectRepository WithOwner()
+    {
+        _query = _query.Include(project => project.Owner);
+        return this;
+    }
+    
+    public ProjectRepository WithOwnerTeam()
+    {
+        _query = _query.Include(project => project.OwnerTeam);
+        return this;
+    }
+
+    public List<Project> GetAll()
+    {
+        return _query.ToList();
+    }
 }

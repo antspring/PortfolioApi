@@ -58,5 +58,19 @@ namespace Portfolio.Controllers
                 return NotFound(e.Message);
             }
         }
+        
+        [AllowAnonymous]
+        [HttpGet("get-all")]
+        public IActionResult GetAllProjects()
+        {
+            return Ok(projectService.GetAllProjects());
+        }
+        
+        [AllowAnonymous]
+        [HttpGet("get/{id:int}")]
+        public IActionResult GetProject(int id)
+        {
+            return Ok(projectService.GetProject(id));
+        }
     }
 }
