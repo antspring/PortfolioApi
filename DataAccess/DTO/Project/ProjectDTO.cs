@@ -8,4 +8,5 @@ public class ProjectDTO
     [JsonPropertyName("description")] public string Description { get; set; }
     [JsonPropertyName("isTeam")] public bool IsTeam { get; set; }
     [JsonPropertyName("ownerId")] public int OwnerId { get; set; }
+    [JsonPropertyName("link")] public string? Link { get; set; }
 }

@@ -23,6 +23,7 @@ public class ProjectViewDTO
 
         IsTeam = project.OwnerTeamId != null;
         Images = project.Images;
+        Link = project.Link;
         CreatedAt = project.CreatedAt;
     }
 
@@ -33,5 +34,6 @@ public class ProjectViewDTO
     [JsonPropertyName("isTeam")] public bool IsTeam { get; set; }
     [JsonPropertyName("ownerId")] public int? OwnerId { get; set; }
     [JsonPropertyName("images")] public List<ProjectImage>? Images { get; set; }
+    [JsonPropertyName("link")] public string? Link { get; set; }
     [JsonPropertyName("createdAt")] public DateTime CreatedAt { get; set; }
 }
