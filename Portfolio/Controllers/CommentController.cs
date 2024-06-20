@@ -17,19 +17,25 @@ namespace Portfolio.Controllers
             commentService.AddComment(commentDto, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
             return Ok();
         }
-        
+
         [HttpPut("update")]
         public IActionResult UpdateComment(CommentUpdateDTO commentDto)
         {
             commentService.UpdateComment(commentDto, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
             return Ok();
         }
-        
+
         [HttpDelete("remove/{commentId:int}")]
         public IActionResult RemoveComment(int commentId)
         {
             commentService.RemoveComment(commentId, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
             return Ok();
+        }
+
+        [HttpGet("get")]
+        public IActionResult GetComments(CommentGetDTO commentGetDto)
+        {
+            return Ok(commentService.GetComments(commentGetDto.ProjectId));
         }
     }
 }

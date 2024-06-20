@@ -18,10 +18,15 @@ public class CommentService(CommentRepository commentRepository)
         comment.Content = commentDto.Content;
         commentRepository.Update(comment);
     }
-    
+
     public void RemoveComment(int commentId, int userId)
     {
         var comment = commentRepository.GetFirstOrDefault(c => c.UserId == userId && c.Id == commentId);
         commentRepository.Remove(comment);
+    }
+
+    public IEnumerable<Comment> GetComments(int projectId)
+    {
+        return commentRepository.GetByQuery(c => c.ProjectId == projectId);
     }
 }
