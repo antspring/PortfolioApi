@@ -22,6 +22,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 app.UseCors();
 app.MapControllers();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

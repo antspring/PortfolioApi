@@ -10,7 +10,7 @@ namespace Portfolio.Controllers
     public class ImagesController(ImagesService imagesService) : ControllerBase
     {
         [HttpPost("upload-avatar")]
-        public async Task<IActionResult> UploadUserImage(IFormFile file)
+        public async Task<IActionResult> UploadUserImage([FromForm] IFormFile file)
         {
             var filePath = await imagesService.UploadUserImage(file, User.Identity.Name);
             return Ok(new { Path = filePath });

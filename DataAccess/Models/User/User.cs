@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using DataAccess.DTO.User;
+using DataAccess.Models.Project;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models.User;
 
 [Index(nameof(Email), IsUnique = true)]
+[Index(nameof(Username), IsUnique = true)]
 public class User : IValidatableObject
 {
     [Key] public int Id { get; set; }
@@ -29,13 +31,14 @@ public class User : IValidatableObject
     [JsonPropertyName("description")] public string? Description { get; set; }
     public List<SocialNetwork>? SocialNetworks { get; set; }
     public List<Education>? Education { get; set; }
-
     public Style? Style { get; set; }
+    public List<Project.Project>? Projects { get; set; }
+    [JsonIgnore] public List<Team>? Teams { get; set; }
+    [JsonIgnore] public List<Favorite>? Favorites { get; set; }
 
     public User Update(UserUpdateDTO userDTO)
     {
         Username = userDTO.Username;
-        ImageUrl = userDTO.ImageUrl;
         Profession = userDTO.Profession;
         Location = userDTO.Location;
         Description = userDTO.Description;
@@ -48,6 +51,11 @@ public class User : IValidatableObject
         if (dbContext.Users.Any(user => user.Email == Email))
         {
             yield return new ValidationResult("Email already exists", new[] { nameof(Email) });
+        }
+
+        if (dbContext.Users.Any(user => user.Username == Username))
+        {
+            yield return new ValidationResult("Username already exists", new[] { nameof(Username) });
         }
     }
 }

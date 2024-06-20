@@ -6,9 +6,8 @@ namespace DataAccess.DTO.User;
 public class UserLoginDTO
 {
     [Required]
-    [EmailAddress]
-    [JsonPropertyName("email")]
-    public string Email { get; set; }
+    [JsonPropertyName("username")]
+    public string Username { get; set; }
 
     [Required]
     [JsonPropertyName("password")]

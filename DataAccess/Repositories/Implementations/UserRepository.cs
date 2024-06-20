@@ -56,4 +56,10 @@ public class UserRepository(PortfolioDbContext dbContext) : IRepository<User>
         _query = _query.Include(user => user.Style);
         return this;
     }
+
+    public UserRepository WithTeams()
+    {
+        _query = _query.Include(user => user.Teams);
+        return this;
+    }
 }

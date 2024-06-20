@@ -30,7 +30,7 @@ public class AuthenticationService(
     public (string, string) Login(UserLoginDTO user)
     {
         var userFromDb =
-            userRepository.GetFirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
+            userRepository.GetFirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
         if (userFromDb == default) throw new UnauthorizedAccessException();
         var claims = _claimsProvider.GetClaims(userFromDb);
         httpContextAccessor.HttpContext?.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims)));
