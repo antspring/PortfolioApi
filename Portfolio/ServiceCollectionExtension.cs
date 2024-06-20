@@ -56,5 +56,7 @@ public static class ServiceCollectionExtension
         services.AddTransient<TeamService>();
         services.AddTransient<FavoriteRepository>();
         services.AddTransient<FavoriteService>();
+        services.AddTransient<CommentRepository>();
+        services.AddTransient<CommentService>();
     }
 }
