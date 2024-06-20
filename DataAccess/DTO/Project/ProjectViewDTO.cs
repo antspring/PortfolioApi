@@ -29,7 +29,7 @@ public class ProjectViewDTO
 
     [JsonPropertyName("id")] public int Id { get; set; }
     [JsonPropertyName("title")] public string Title { get; set; }
-    [JsonPropertyName("desription")] public string Description { get; set; }
+    [JsonPropertyName("description")] public string Description { get; set; }
     [JsonPropertyName("owner")] public string Owner { get; set; }
     [JsonPropertyName("isTeam")] public bool IsTeam { get; set; }
     [JsonPropertyName("ownerId")] public int? OwnerId { get; set; }
