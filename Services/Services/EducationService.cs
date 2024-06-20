@@ -67,4 +67,10 @@ public class EducationService(EducationRepository educationRepository)
         return educationRepository.WithUser()
             .GetFirstOrDefault(e => e.User.Username == username && e.Id == educationId);
     }
+    
+    public IEnumerable<Education> GetAllEducations(string username)
+    {
+        return educationRepository.WithUser()
+            .GetByQuery(e => e.User.Username == username);
+    }
 }

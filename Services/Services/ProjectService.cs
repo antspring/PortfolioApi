@@ -10,19 +10,10 @@ public class ProjectService(
     ProjectImageRepository projectImageRepository,
     TeamRepository teamRepository)
 {
-    public async Task AddProject(List<IFormFile> files, ProjectDTO projectDto, string ownerName, int ownerId)
+    public async Task AddProject(List<IFormFile> files, ProjectDTO projectDto, string ownerName)
     {
-        projectRepository.Add(new Project().Update(projectDto));
-        Project project;
-        if (projectDto.IsTeam)
-        {
-            project = projectRepository.GetFirstOrDefault(project => project.OwnerTeamId == ownerId);
-        }
-        else
-        {
-            project = projectRepository.GetFirstOrDefault(project => project.OwnerId == ownerId);
-        }
-
+        var project = new Project().Update(projectDto);
+        projectRepository.Add(project);
         project.CreatedAt = DateTime.Now.ToUniversalTime();
         projectRepository.Update(project);
         await SavingFiles(files, ownerName, project.Id);
@@ -103,7 +94,7 @@ public class ProjectService(
             throw new Exception("Team not found.");
         }
 
-        await AddProject(files, projectDto, team.Name, team.Id);
+        await AddProject(files, projectDto, team.Name);
     }
 
     public List<ProjectViewDTO> GetAllProjects()
@@ -111,7 +102,7 @@ public class ProjectService(
         return projectRepository.WithOwner().WithOwnerTeam().WithImages().GetAll()
             .Select(project => new ProjectViewDTO(project)).ToList();
     }
-    
+
     public ProjectViewDTO GetProject(int id)
     {
         return new ProjectViewDTO(projectRepository.WithOwner().WithOwnerTeam().WithImages()

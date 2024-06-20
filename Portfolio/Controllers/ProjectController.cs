@@ -29,8 +29,7 @@ namespace Portfolio.Controllers
             }
             else
             {
-                await projectService.AddProject(files, projectDto, User.Identity.Name,
-                    int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+                await projectService.AddProject(files, projectDto, User.Identity.Name);
             }
 
             return Ok();
