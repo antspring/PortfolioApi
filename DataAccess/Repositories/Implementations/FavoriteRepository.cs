@@ -33,6 +33,7 @@ public class FavoriteRepository(PortfolioDbContext dbContext) : IRepository<Favo
         return dbContext.Favorites
             .Include(f => f.Project.Owner)
             .Include(f => f.Project.OwnerTeam)
+            .Include(f => f.Project.Images)
             .ToList();
     }
 
