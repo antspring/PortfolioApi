@@ -26,11 +26,13 @@ public class ProjectService(
         Project project;
         if (projectDto.IsTeam)
         {
-            project = projectRepository.GetFirstOrDefault(project => project.OwnerTeamId == ownerId);
+            project = projectRepository.GetFirstOrDefault(project =>
+                project.OwnerTeamId == ownerId && project.Id == projectDto.Id);
         }
         else
         {
-            project = projectRepository.GetFirstOrDefault(project => project.OwnerId == ownerId);
+            project = projectRepository.GetFirstOrDefault(project =>
+                project.OwnerId == ownerId && project.Id == projectDto.Id);
         }
 
         projectRepository.Update(project.Update(projectDto));
